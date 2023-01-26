@@ -7,7 +7,6 @@ const message = document.querySelector('textarea');
 const formData = {};
 
 const onFormInput = function (event) {
-    
     formData[event.target.name] = event.target.value; 
 
     const formDataJSON = JSON.stringify(formData);
@@ -16,33 +15,42 @@ const onFormInput = function (event) {
 
 const onFormSubmit = function (event) {
     event.preventDefault();
-    console.log(formData);
+
+   const { elements: { email, message },} = event.currentTarget;
+
+    if (email.value === '' || message.value === '') {
+      return alert('Будь ласка, заповніть всі поля!');
+    }
+
+    const formDetails = { email: email.value, message: message.value };
+    console.log(formDetails);
+    
+
     event.currentTarget.reset();
     
     localStorage.removeItem(FEEDBACK);
-};
+    };
+
+
+const savedInfoJSON = localStorage.getItem(FEEDBACK);
+const parsedFormData = JSON.parse(savedInfoJSON);
 
 updateForm();
 
 function updateForm() {
-    const savedInfo = localStorage.getItem(FEEDBACK);
-    if (savedInfo) {
-        try {
-            const parsedFormData = JSON.parse(FEEDBACK);
-            console.log(parsedFormData.email);
-            console.log(parsedFormData.message);
-    
-            email.value = parsedFormData.email;
-            message.textContent = parsedFormData.message;
 
-        } catch (error) {
-            console.log(error.name); // "SyntaxError"
-            console.log(error.message); // "Unexpected token u in JSON at position 1"
-        }
-    }
+    if (savedInfoJSON) {
+    
+    console.log(parsedFormData.email || '');
+    console.log(parsedFormData.message || '');
+        
+    email.value = parsedFormData.email || '';
+    message.value = parsedFormData.message || '';
+    
+    } 
 }
 
 form.addEventListener('input', throttle(onFormInput, 500));
-form.addEventListener('supmit', onFormSubmit);
+form.addEventListener('submit', onFormSubmit);
 
 
