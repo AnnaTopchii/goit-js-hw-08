@@ -6,8 +6,12 @@ const email = document.querySelector('input');
 const message = document.querySelector('textarea');
 const formData = {};
 
+formData.email = email.value
+
 const onFormInput = function (event) {
-    formData[event.target.name] = event.target.value; 
+   // formData[event.target.name] = event.target.value; 
+    formData.email = email.value
+    formData.message = message.value
 
     const formDataJSON = JSON.stringify(formData);
     localStorage.setItem(FEEDBACK, formDataJSON);
